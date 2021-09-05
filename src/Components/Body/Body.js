@@ -9,7 +9,7 @@ const Body = () => {
   const [number, setNumber] = useState(0);
   const [images, setImages] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:2929/image")
+    fetch("https://rocky-chamber-15010.herokuapp.com/image")
       .then((res) => res.json())
       .then((data) => setImages(data));
   }, [number]);
@@ -22,7 +22,7 @@ const Body = () => {
 
   const onSubmit = (data) => {
     const imgURL = data.link;
-    fetch("http://localhost:2929/image/post", {
+    fetch("https://rocky-chamber-15010.herokuapp.com/image/post", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ imgURL }),
@@ -31,7 +31,7 @@ const Body = () => {
       .then((data) => setNumber(number + 1));
   };
   const deleteImage = (_id) => {
-    fetch(`http://localhost:2929/image/delete`, {
+    fetch(`https://rocky-chamber-15010.herokuapp.com/image/delete`, {
       method: "delete",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ _id }),
@@ -50,7 +50,7 @@ const Body = () => {
         console.log("maw", response.data.data.display_url);
 
         if (imgURL) {
-          fetch("http://localhost:2929/image/post", {
+          fetch("https://rocky-chamber-15010.herokuapp.com/image/post", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ imgURL }),

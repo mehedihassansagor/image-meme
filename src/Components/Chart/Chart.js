@@ -49,7 +49,7 @@ const Chart = () => {
   const [chartData , setChartData] = useState([])
   console.log("from chart")
   useEffect(() => {
-    fetch("http://localhost:2929/image")
+    fetch("https://rocky-chamber-15010.herokuapp.com/image")
       .then((res) => res.json())
       .then((data) => setChartData(data));
   }, []);
