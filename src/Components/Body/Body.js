@@ -2,8 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import Chart from "../Chart/Chart";
 import Footer from "../Footer/Footer";
+import { Link } from 'react-router-dom';
 
 const Body = () => {
   const [number, setNumber] = useState(0);
@@ -17,19 +17,22 @@ const Body = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
     const imgURL = data.link;
+    const createdAt = new Date();
     fetch("https://rocky-chamber-15010.herokuapp.com/image/post", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ imgURL }),
+      body: JSON.stringify({ imgURL, createdAt }),
     })
       .then((res) => res.json())
-      .then((data) => setNumber(number + 1));
+      .then((data) => {
+        setNumber(number + 1);
+      });
   };
+
   const deleteImage = (_id) => {
     fetch(`https://rocky-chamber-15010.herokuapp.com/image/delete`, {
       method: "delete",
@@ -39,28 +42,31 @@ const Body = () => {
       .then((res) => res.json())
       .then((data) => setNumber(number + 1));
   };
+
   const handleImageUpload = (e) => {
     const imageData = new FormData();
+    const createdAt = new Date();
     imageData.set("key", "798767f30df3dcdc7763cb42cb4936d6");
     imageData.append("image", e.target.files[0]);
+    imageData.append("createdAt", createdAt);
     axios
       .post("https://api.imgbb.com/1/upload", imageData)
       .then(function (response) {
         const imgURL = response.data.data.display_url;
-        console.log("maw", response.data.data.display_url);
 
         if (imgURL) {
           fetch("https://rocky-chamber-15010.herokuapp.com/image/post", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ imgURL }),
+            body: JSON.stringify({ imgURL, createdAt }),
           })
             .then((res) => res.json())
-            .then((data) => setNumber(number + 1));
+            .then((data) => {
+              setNumber(number + 1);
+            });
         }
       })
       .catch(function (error) {
-        console.log(error);
       });
   };
 
@@ -79,7 +85,7 @@ const Body = () => {
                 name="link"
                 {...register("link")}
               />
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" className="btn btn-primary">
                 Add Meme
               </button>
             </div>
@@ -98,7 +104,7 @@ const Body = () => {
         </div>
         <div className="row">
           {images.map((image, index) => (
-            <div
+            <div key={image._id}
               className={`${
                 (index + 6) % 6 === 0 ? "col-sm-12 col-md-8" : "col-md-4"
               } mt-5`}
@@ -122,8 +128,7 @@ const Body = () => {
           ))}
         </div>
       </div>
-      <Chart />
-
+      
       <div>
         <Footer />
       </div>

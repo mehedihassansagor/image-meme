@@ -15,3 +15,9 @@ code {
 .image-style{
   height: 300px;
 }
+
+.link-style{
+  text-decoration: none;
+  font-weight: 700;
+  color: black;
+}
